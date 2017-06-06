@@ -70,7 +70,8 @@ class Product_model extends CI_Model {
         $data = array(
             'prod_id' => $id,
             'quantity' => $quantity ,
-            'user_id' => $this->session->userdata('loginUser') -> user_id
+           'user_id' => $this->session->userdata('loginUser') -> user_id
+           // 'user_id' => 1
         );
         $this->db->insert('t_cart', $data);
         return $this->db->affected_rows();
@@ -102,6 +103,10 @@ class Product_model extends CI_Model {
     {
         $sql = 'select * from t_cart c, t_product p,t_product_img i where c.prod_id=p.prod_id and p.prod_id=i.prod_id and i.is_main=1 and c.user_id='.$user_id;
         return  $this->db->query($sql)->result();
+    }
+    public function del_product($id){
+        $sql="delete from t_cart where prod_id='$id'";
+        return $this->db->query($sql);
     }
 
 

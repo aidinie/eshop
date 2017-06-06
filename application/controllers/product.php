@@ -16,6 +16,8 @@ class Product extends CI_Controller
 
     public function get_products()
     {
+         header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+         header("Access-Control-Allow-Origin: *");
         $page = $this->input->get('page');
         $cateId = $this->input->get('cateId');
         $tagId = $this->input->get('tagId');
@@ -57,14 +59,25 @@ class Product extends CI_Controller
 
         }
     }
+    public function product_detail($prod_id)
+    {
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $product = $this->product_model->get_by_id($prod_id);
+        echo json_encode($product);
+    }
 
     public function add_cart()
     {
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
         $quantity = $this -> input -> get('quantity');
         $id = $this -> input -> get('id');
         $product = $this->product_model->get_cart_by_prod_id($id);
         if($product){
             $rows = $this -> product_model -> update_cart($id, $product -> quantity, $quantity, $this->session->userdata('loginUser') -> user_id);
+           // $rows = $this -> product_model -> update_cart($id, $product -> quantity, $quantity, 1);
+
         }else{
             $rows = $this -> product_model -> add_cart($quantity, $id);
         }
@@ -81,12 +94,23 @@ class Product extends CI_Controller
 
     public function get_cart_list()
     {
-        $loginUser = $this->session->userdata('loginUser');
-        $result = $this -> product_model -> get_cart_info_user_id($loginUser -> user_id);
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+//        $loginUser = $this->session->userdata('loginUser');
+       // $result = $this -> product_model -> get_cart_info_user_id($loginUser -> user_id);
+         $result = $this -> product_model -> get_cart_info_user_id(1);
+
         $data = array(
             'cartInfo' => $result
         );
         echo json_encode($data);
+    }
+    public function del_product(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $id = $this -> input -> get('id');
+        $row = $this->product_model->del_product($id);
+        echo $row;
     }
 
 }

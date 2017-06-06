@@ -22,6 +22,8 @@ class Welcome extends CI_Controller {
 
 	public function check_login()
     {
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
         $loginUser = $this->session->userdata('loginUser');
         if($loginUser){
             echo 'logined';
@@ -32,13 +34,15 @@ class Welcome extends CI_Controller {
 
     public function login()
     {
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
         $this->load->model('user_model');
         $user = $this->user_model->get_by_name_and_pwd($username, $password);
         if($user){
-            $this->session->set_userdata('loginUser', $user);
+            $this->session->set_userdata('loginUser',$user);
             echo 'success';
         }else{
             echo 'fail';
